@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+
+        #weather-info {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="city" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button id="search" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div id="weather-info" class="weather-status text-white text-center">
+            <img id="weather-icon" src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 id="search-city"></h1>
+            <h3><span id="temperature"></span>&deg;C</h3>
+            <h1 id="climate-status" class="lead"></h1>
+        </div>
+    </div>
+    <script>
+        const searchBtn = document.getElementById('search');
+        const cityInput = document.getElementById('city');
+        const tempIcon = document.getElementById('weather-icon');
+        searchBtn.addEventListener('click', function ()
+        {
+            if (cityInput.value.length != 0 && isNaN(cityInput.value))
+            {
+                document.getElementById('weather-info').style.display = 'block';
+                fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityInput.value + '&appid=ae8591ca06c5774da1b92eb2646c9f70')
+                    .then(res => res.json())
+                    .then(data =>
+                    {
+                        const cityName = data.name
+                        const temperature = (parseFloat(data.main.temp - 273.15)).toFixed(2)
+                        const climate = data.weather[0].description
+                        const id = data.weather[0].id
+                        // console.log(cityName, temperature, climate);
+                        // console.log(data);
+                        // console.log(tempIcon);
+                        document.getElementById('search-city').innerText = cityName;
+                        document.getElementById('temperature').innerText = temperature;
+                        document.getElementById('climate-status').innerText = climate;
+                        if (id < 250)
+                        {
+                            tempIcon.src = 'https://openweathermap.org/img/wn/11d@2x.png'
+                        }
+                        else if (id < 350)
+                        {
+                            tempIcon.src = 'https://openweathermap.org/img/wn/09d@2x.png'
+                        }
+                        else if (id < 550)
+                        {
+                            tempIcon.src = 'https://openweathermap.org/img/wn/10d@2x.png'
+                        }
+                        else if (id < 650)
+                        {
+                            tempIcon.src = 'https://openweathermap.org/img/wn/13d@2x.png'
+                        }
+                        else if (id < 800)
+                        {
+                            tempIcon.src = 'https://openweathermap.org/img/wn/50d@2x.png'
+                        }
+                        else if (id === 800)
+                        {
+                            tempIcon.src = 'https://openweathermap.org/img/wn/01d@2x.png'
+                        }
+                        else if (id > 800)
+                        {
+                            tempIcon.src = 'https://openweathermap.org/img/wn/02n@2x.png'
+                        }
+                        cityInput.value = '';
+                    })
+                    .catch(error =>
+                    {
+                        alert('Spelling Mistake');
+                    })
+            }
+        })
+
+    </script>
+</body>
+
+</html>
