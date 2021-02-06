@@ -35,18 +35,16 @@
         <div id="weather-info" class="weather-status text-white text-center">
             <img id="weather-icon" src="" alt="">
             <h1 id="search-city"></h1>
-            <h3 id="temperature-unit"><span id="temperature"></span></h3>
+            <h3><span id="temperature"></span></h3>
             <h1 id="climate-status" class="lead"></h1>
         </div>
     </div>
     <script>
         const searchBtn = document.getElementById('search');
         const cityInput = document.getElementById('city');
-        const tempIcon = "https://openweathermap.org/img/wn/";
 
         searchBtn.addEventListener('click', function ()
         {
-            // console.log(tempIcon);
             if (cityInput.value.length != 0 && isNaN(cityInput.value))
             {
                 document.getElementById('weather-info').style.display = 'block';
@@ -64,42 +62,13 @@
                     const cityName = data.name
                     const temperature = (parseFloat(data.main.temp - 273.15)).toFixed(2)
                     const climateStatus = data.weather[0].description
-                    const id = data.weather[0].id
+                    const icon = data.weather[0].icon
                     // console.log(cityName, temperature, climate);
                     // console.log(data);
-                    // console.log(tempIcon);
                     document.getElementById('search-city').innerText = cityName;
                     document.getElementById('temperature').innerText = temperature + ' °C';
-                    // document.getElementById('temperature-unit').innerText = '&deg;C';
                     document.getElementById('climate-status').innerText = climateStatus;
-                    if (id < 250)
-                    {
-                        document.getElementById('weather-icon').src = tempIcon + '11d@2x.png'
-                    }
-                    else if (id < 350)
-                    {
-                        document.getElementById('weather-icon').src = tempIcon + '09d@2x.png'
-                    }
-                    else if (id < 550)
-                    {
-                        document.getElementById('weather-icon').src = tempIcon + '10d@2x.png'
-                    }
-                    else if (id < 650)
-                    {
-                        document.getElementById('weather-icon').src = tempIcon + '13d@2x.png'
-                    }
-                    else if (id < 800)
-                    {
-                        document.getElementById('weather-icon').src = tempIcon + '50d@2x.png'
-                    }
-                    else if (id === 800)
-                    {
-                        document.getElementById('weather-icon').src = tempIcon + '01d@2x.png'
-                    }
-                    else if (id > 800)
-                    {
-                        document.getElementById('weather-icon').src = tempIcon + '02n@2x.png'
-                    }
+                    document.getElementById('weather-icon').src = `https://openweathermap.org/img/wn/${ icon }@2x.png`
                     cityInput.value = '';
                 }
             }
